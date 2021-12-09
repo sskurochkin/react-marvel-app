@@ -23,7 +23,7 @@ const CharInfo = ({ charId }) => {
 	}, [charId]);
 
 	const onCharLoaded = (char) => {
-		setChar(char=>char);
+		setChar(char);
 		setLoading(false);
 	};
 
