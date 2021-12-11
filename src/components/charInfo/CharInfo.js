@@ -1,12 +1,13 @@
 import { Component } from "react";
 import PropTypes from "prop-types";
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/MarvelService";
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/errorMessage";
 import Skeleton from "../skeleton/Skeleton";
 
 import "./charInfo.scss";
 
+<<<<<<< Updated upstream
 class CharInfo extends Component {
 	state = {
 		char: null,
@@ -15,6 +16,12 @@ class CharInfo extends Component {
 	};
 
 	marvelService = new MarvelService();
+=======
+const CharInfo = ({ charId }) => {
+	const [char, setChar] = useState(null);
+
+	const {error, loading, getCaracter, clearError} =  useMarvelService();
+>>>>>>> Stashed changes
 
 	componentDidMount() {
 		this.updateChar();
@@ -26,6 +33,7 @@ class CharInfo extends Component {
 		}
 	}
 
+<<<<<<< Updated upstream
 	onCharLoaded = (char) => {
 		this.setState({
 			char,
@@ -43,6 +51,10 @@ class CharInfo extends Component {
 			error: true,
 			loading: false,
 		});
+=======
+	const onCharLoaded = (char) => {
+		setChar(char);
+>>>>>>> Stashed changes
 	};
 
 	updateChar = () => {
@@ -50,12 +62,17 @@ class CharInfo extends Component {
 		if (!charId) {
 			return;
 		}
+<<<<<<< Updated upstream
 
 		this.onCharLoading();
 		this.marvelService
 			.getCaracter(charId)
 			.then(this.onCharLoaded)
 			.catch(this.onError);
+=======
+		clearError();
+		getCaracter(charId).then(onCharLoaded);
+>>>>>>> Stashed changes
 	};
 
 	render() {

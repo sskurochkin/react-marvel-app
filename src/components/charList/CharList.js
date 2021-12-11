@@ -1,10 +1,11 @@
 import { Component } from "react";
 import PropTypes from "prop-types";
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/MarvelService";
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/errorMessage";
 import "./charList.scss";
 
+<<<<<<< Updated upstream
 class CharList extends Component {
 	state = {
 		charList: [],
@@ -33,6 +34,25 @@ class CharList extends Component {
 		this.setState({
 			newItemLoading: true,
 		});
+=======
+const CharList = (props) => {
+	const [charList, setCharList] = useState([]);
+	const [newItemLoading, setNewItemLoading] = useState(false);
+	const [offset, setOffset] = useState(1100);
+	const [charEnded, setCharEnded] = useState(false);
+
+	const { error, loading, getAllCaracters } = useMarvelService();
+
+	useEffect(() => {
+		onRequest(offset, true);
+	}, []);
+
+	const onRequest = (offset, initial) => {
+		initial ? setNewItemLoading(false) : setNewItemLoading(true);
+
+		setNewItemLoading(true);
+		getAllCaracters(offset).then(onCharListLoaded);
+>>>>>>> Stashed changes
 	};
 
 	onCharListLoaded = (newCharList) => {
@@ -41,6 +61,7 @@ class CharList extends Component {
 			ended = true;
 		}
 
+<<<<<<< Updated upstream
 		this.setState(({ offset, charList }) => ({
 			charList: [...charList, ...newCharList],
 			loading: false,
@@ -69,6 +90,15 @@ class CharList extends Component {
 		// На самом деле, решение с css-классом можно сделать, вынеся персонажа
 		// в отдельный компонент. Но кода будет больше, появится новое состояние
 		// и не факт, что мы выиграем по оптимизации за счет бОльшего кол-ва элементов
+=======
+		setCharList((charList) => [...charList, ...newCharList]);
+		setNewItemLoading((newItemLoading) => false);
+		setOffset((offset) => offset + 9);
+		setCharEnded((charEnded) => ended);
+	};
+
+	const itemRefs = useRef([]);
+>>>>>>> Stashed changes
 
 		// По возможности, не злоупотребляйте рефами, только в крайних случаях
 		this.itemRefs.forEach((item) =>
@@ -116,6 +146,7 @@ class CharList extends Component {
 		return <ul className='char__grid'>{items}</ul>;
 	}
 
+<<<<<<< Updated upstream
 	render() {
 		const { charList, loading, error, newItemLoading, offset, charEnded } =
 			this.state;
@@ -140,6 +171,27 @@ class CharList extends Component {
 		);
 	}
 }
+=======
+	const items = renderItems(charList);
+	const errorMessage = error ? <ErrorMessage /> : null;
+	const spinner = loading && !newItemLoading ? <Spinner /> : null;
+
+	return (
+		<div className='char__list'>
+			{errorMessage}
+			{spinner}
+			{items}
+			<button
+				className='button button__main button__long'
+				disabled={newItemLoading}
+				style={{ display: charEnded ? "none" : null }}
+				onClick={() => onRequest(offset)}>
+				<div className='inner'>load more</div>
+			</button>
+		</div>
+	);
+};
+>>>>>>> Stashed changes
 
 CharList.propTypes = {
 	onCharSelected: PropTypes.func.isRequired,
