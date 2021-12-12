@@ -1,5 +1,6 @@
 import { Component } from "react";
 import AppHeader from "../appHeader/AppHeader";
+import ComicsList from "../comicsList/ComicsList";
 import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
@@ -24,7 +25,12 @@ class App extends Component {
         <div className="app">
             <AppHeader/>
             <main>
+
                 <ErrorBoundary>
+                    <ComicsList/>
+                </ErrorBoundary>
+
+                {/* <ErrorBoundary>
 					<RandomChar/>
 				</ErrorBoundary>
                 <div className="char__content">
@@ -35,7 +41,7 @@ class App extends Component {
                     	<CharInfo charId = {this.state.selectedChar}/>
                     </ErrorBoundary>
                 </div>
-                <img className="bg-decoration" src={decoration} alt="vision"/>
+                <img className="bg-decoration" src={decoration} alt="vision"/> */}
             </main>
         </div>
     )
