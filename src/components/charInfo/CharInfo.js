@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import useMarvelService from "../../services/MarvelService";
+import { Link } from "react-router-dom";
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/errorMessage";
 import Skeleton from "../skeleton/Skeleton";
@@ -46,6 +47,7 @@ const CharInfo = ({ charId }) => {
 
 const View = ({ char }) => {
 	const { name, description, homepage, wiki, thumbnail, comics } = char;
+	console.log(comics)
 
 	const img = thumbnail.search(/'image_not_available'/) ? (
 		<img
@@ -88,7 +90,7 @@ const View = ({ char }) => {
 						if (i <= 10) {
 							return (
 								<li className='char__comics-item' key={i}>
-									{item.name}
+									<Link to={`/comics/${item.resourceURI.replace('http://gateway.marvel.com/v1/public/comics/','')}`}>{item.name}</Link>
 								</li>
 							);
 						}
