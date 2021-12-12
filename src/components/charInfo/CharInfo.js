@@ -90,7 +90,7 @@ const View = ({ char }) => {
 						if (i <= 10) {
 							return (
 								<li className='char__comics-item' key={i}>
-									<Link to={`/comics/${item.resourceURI.replace('http://gateway.marvel.com/v1/public/comics/','')}`}>{item.name}</Link>
+									<Link to={item.resourceURI.replace('http://gateway.marvel.com/v1/public','')}>{item.name}</Link>
 								</li>
 							);
 						}
