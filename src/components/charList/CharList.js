@@ -24,7 +24,8 @@ const CharList = (props) => {
 		getAllCaracters(offset).then(onCharListLoaded);
 	};
 
-	const onCharListLoaded = (newCharList) => {
+	const onCharListLoaded = async (newCharList) => {
+
 		let ended = false;
 		if (newCharList.length < 9) {
 			ended = true;

@@ -47,7 +47,6 @@ const CharInfo = ({ charId }) => {
 
 const View = ({ char }) => {
 	const { name, description, homepage, wiki, thumbnail, comics } = char;
-	console.log(comics)
 
 	const img = thumbnail.search(/'image_not_available'/) ? (
 		<img
