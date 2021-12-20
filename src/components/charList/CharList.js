@@ -1,11 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import useMarvelService from "../../services/MarvelService";
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/errorMessage";
 import "./charList.scss";
 
 const CharList = (props) => {
+	const duration = 1000;
+
 	const [charList, setCharList] = useState([]);
 	const [newItemLoading, setNewItemLoading] = useState(false);
 	const [offset, setOffset] = useState(1300);
@@ -25,7 +28,6 @@ const CharList = (props) => {
 	};
 
 	const onCharListLoaded = async (newCharList) => {
-
 		let ended = false;
 		if (newCharList.length < 9) {
 			ended = true;
@@ -58,31 +60,39 @@ const CharList = (props) => {
 			}
 
 			return (
-				<li
-					className='char__item'
-					tabIndex={0}
-					ref={(el) => (itemRefs.current[i] = el)}
+				<CSSTransition
+					timeout={duration}
 					key={item.id}
-					onClick={() => {
-						props.onCharSelected(item.id);
-						focusOnItem(i);
-					}}
-					onKeyPress={(e) => {
-						if (e.key === " " || e.key === "Enter") {
+					classNames='char__item'>
+					<li
+						className='char__item'
+						tabIndex={0}
+						ref={(el) => (itemRefs.current[i] = el)}
+						onClick={() => {
 							props.onCharSelected(item.id);
 							focusOnItem(i);
-						}
-					}}>
-					<img
-						src={item.thumbnail}
-						alt={item.name}
-						style={imgStyle}
-					/>
-					<div className='char__name'>{item.name}</div>
-				</li>
+						}}
+						onKeyPress={(e) => {
+							if (e.key === " " || e.key === "Enter") {
+								props.onCharSelected(item.id);
+								focusOnItem(i);
+							}
+						}}>
+						<img
+							src={item.thumbnail}
+							alt={item.name}
+							style={imgStyle}
+						/>
+						<div className='char__name'>{item.name}</div>
+					</li>
+				</CSSTransition>
 			);
 		});
-		return <ul className='char__grid'>{items}</ul>;
+		return (
+			<ul className='char__grid'>
+				<TransitionGroup component={null}>{items}</TransitionGroup>
+			</ul>
+		);
 	}
 
 	const items = renderItems(charList);
@@ -90,18 +100,19 @@ const CharList = (props) => {
 	const spinner = loading && !newItemLoading ? <Spinner /> : null;
 
 	return (
-		<div className='char__list'>
-			{errorMessage}
-			{spinner}
-			{items}
-			<button
-				className='button button__main button__long'
-				disabled={newItemLoading}
-				style={{ display: charEnded ? "none" : null }}
-				onClick={() => onRequest(offset)}>
-				<div className='inner'>load more</div>
-			</button>
-		</div>
+		
+			<div className='char__list'>
+				{errorMessage}
+				{spinner}
+				{items}
+				<button
+					className='button button__main button__long'
+					disabled={newItemLoading}
+					style={{ display: charEnded ? "none" : null }}
+					onClick={() => onRequest(offset)}>
+					<div className='inner'>load more</div>
+				</button>
+			</div>
 	);
 };
 
