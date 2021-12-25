@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./CharForm.scss";
 import {
@@ -6,7 +6,6 @@ import {
 	Form,
 	Field,
 	ErrorMessage as FormikError,
-	useField,
 } from "formik";
 import * as Yup from "yup";
 import useMarvelService from "../../services/MarvelService";
