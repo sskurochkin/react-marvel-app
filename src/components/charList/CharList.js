@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import PropTypes from "prop-types";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import useMarvelService from "../../services/MarvelService";
@@ -116,6 +116,10 @@ const CharList = (props) => {
 		);
 	}
 
+	const elements = useMemo(()=>{
+		return setContent(process, ()=>renderItems(charList), newItemLoading)
+	}, [process])
+
 	// const items = renderItems(charList);
 	// const errorMessage = error ? <ErrorMessage /> : null;
 	// const spinner = loading && !newItemLoading ? <Spinner /> : null;
@@ -127,7 +131,7 @@ const CharList = (props) => {
 				{spinner}
 				{items} */}
 
-				{setContent(process,()=>renderItems(charList), newItemLoading)}
+				{elements}
 
 				<button
 					className='button button__main button__long'
