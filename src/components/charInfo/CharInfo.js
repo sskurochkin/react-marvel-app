@@ -2,16 +2,13 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import useMarvelService from "../../services/MarvelService";
 import { Link } from "react-router-dom";
-import Spinner from "../spinner/Spinner";
-import ErrorMessage from "../errorMessage/errorMessage";
-import Skeleton from "../skeleton/Skeleton";
-
+import { setContent } from "../../utils/setContent";
 import "./charInfo.scss";
 
 const CharInfo = ({ charId }) => {
 	const [char, setChar] = useState(null);
 
-	const { error, loading, getCaracter, clearError } = useMarvelService();
+	const { error, loading, getCaracter, clearError, process, setProcess } = useMarvelService();
 
 	useEffect(() => {
 		updateChar();
@@ -27,26 +24,49 @@ const CharInfo = ({ charId }) => {
 			return;
 		}
 		clearError();
-		getCaracter(charId).then(onCharLoaded);
+		getCaracter(charId).then(onCharLoaded).then(()=>setProcess('confirmed'));
 	};
 
-	const skeleton = char || loading || error ? null : <Skeleton />;
-	const errorMessage = error ? <ErrorMessage /> : null;
-	const spinner = loading ? <Spinner /> : null;
-	const content = !(loading || error || !char) ? <View char={char} /> : null;
+
+	// const setContent=(process, char)=>{
+
+	// 	switch(process){
+	// 		case 'waiting':
+	// 			return <Skeleton/>
+	// 			break
+	// 		case 'loading':
+	// 			return <Spinner/>
+	// 			break
+	// 		case 'confirmed':
+	// 			return <View char={char}/>
+	// 			break
+	// 		case 'error':
+	// 			return <ErrorMessage/>
+	// 			break
+	// 		default : 
+	// 			throw new Error('Unexepted state ')	
+	// 	}
+	// }
+
+	// const skeleton = char || loading || error ? null : <Skeleton />;
+	// const errorMessage = error ? <ErrorMessage /> : null;
+	// const spinner = loading ? <Spinner /> : null;
+	// const content = !(loading || error || !char) ? <View char={char} /> : null;
 
 	return (
 		<div className='char__info'>
-			{skeleton}
+			{/* {skeleton}
 			{errorMessage}
 			{spinner}
-			{content}
+			{content} */}
+		{setContent(process, View, char)}
+
 		</div>
 	);
 };
 
-const View = ({ char }) => {
-	const { name, description, homepage, wiki, thumbnail, comics, id } = char;
+const View = ({ data }) => {
+	const { name, description, wiki, thumbnail, comics, id } = data;
 
 	const img = thumbnail.search(/'image_not_available'/) ? (
 		<img

@@ -5,17 +5,37 @@ import useMarvelService from "../../services/MarvelService";
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/errorMessage";
 
+
+const setContent = (process, Component, newItemLoading) => {
+	switch (process) {
+		case "waiting":
+			return <Spinner />;
+			break;
+		case "loading":
+			return newItemLoading ? <Component /> : <Spinner />;
+			break;
+		case "confirmed":
+			return <Component/>;
+			break;
+		case "error":
+			return <ErrorMessage />;
+			break;
+		default:
+			throw new Error("Unexepted state ");
+	}
+};
+
 const ComicsList = () => {
 	const [comicsList, setComicsList] = useState([]);
 	const [newItemLoading, setnewItemLoading] = useState(false);
 	const [offset, setOffset] = useState(0);
 	const [comicsEnded, setComicsEnded] = useState(false);
 
-	const { loading, error, getAllComics } = useMarvelService();
+	const { loading, error, getAllComics, process, setProcess } = useMarvelService();
 
 	const onRequest = (offset, initial) => {
 		initial ? setnewItemLoading(false) : setnewItemLoading(true);
-		getAllComics(offset).then(onComicsListLoaded);
+		getAllComics(offset).then(onComicsListLoaded).then(()=>setProcess('confirmed'));
 	};
 
 	useEffect(() => {
@@ -52,15 +72,18 @@ const ComicsList = () => {
 		return <ul className='comics__grid'>{items}</ul>;
 	}
 
-	const items = renderItems(comicsList);
-	const errorMessage = error ? <ErrorMessage /> : null;
-	const spinner = loading && !newItemLoading ? <Spinner /> : null;
+	// const items = renderItems(comicsList);
+	// const errorMessage = error ? <ErrorMessage /> : null;
+	// const spinner = loading && !newItemLoading ? <Spinner /> : null;
 
 	return (
 		<div className='comics__list'>
-			{spinner}
+			{/* {spinner}
 			{errorMessage}
-			{items}
+			{items} */}
+
+			{setContent(process, ()=>renderItems(comicsList), newItemLoading)}
+
 			<button
 				className='button button__main button__long'
 				onClick={() => onRequest(offset)}
