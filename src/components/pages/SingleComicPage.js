@@ -1,5 +1,5 @@
 import "./singleComicPage.scss";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useMarvelService from "../../services/MarvelService";
 import Spinner from "../spinner/Spinner";
@@ -14,6 +14,7 @@ const SinglePage = ({ Component, dataType }) => {
 
 	useEffect(() => {
 		updateData();
+		// eslint-disable-next-line
 	}, [id]);
 
 	const updateData = () => {

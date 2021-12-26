@@ -11,11 +11,11 @@ import "./charInfo.scss";
 const CharInfo = ({ charId }) => {
 	const [char, setChar] = useState(null);
 
-	const {error, loading, getCaracter, clearError} =  useMarvelService();
-
+	const { error, loading, getCaracter, clearError } = useMarvelService();
 
 	useEffect(() => {
 		updateChar();
+		// eslint-disable-next-line
 	}, [charId]);
 
 	const onCharLoaded = (char) => {
@@ -46,7 +46,7 @@ const CharInfo = ({ charId }) => {
 };
 
 const View = ({ char }) => {
-	const { name, description, homepage, wiki, thumbnail, comics } = char;
+	const { name, description, homepage, wiki, thumbnail, comics, id } = char;
 
 	const img = thumbnail.search(/'image_not_available'/) ? (
 		<img
@@ -70,9 +70,12 @@ const View = ({ char }) => {
 				<div>
 					<div className='char__info-name'>{name}</div>
 					<div className='char__btns'>
-						<a href={homepage} className='button button__main'>
+						<Link
+							to={`/characters/${id}`}
+							className='button button__main'>
 							<div className='inner'>homepage</div>
-						</a>
+						</Link>
+
 						<a href={wiki} className='button button__secondary'>
 							<div className='inner'>Wiki</div>
 						</a>
@@ -89,7 +92,13 @@ const View = ({ char }) => {
 						if (i <= 10) {
 							return (
 								<li className='char__comics-item' key={i}>
-									<Link to={item.resourceURI.replace('http://gateway.marvel.com/v1/public','')}>{item.name}</Link>
+									<Link
+										to={item.resourceURI.replace(
+											"http://gateway.marvel.com/v1/public",
+											""
+										)}>
+										{item.name}
+									</Link>
 								</li>
 							);
 						}
